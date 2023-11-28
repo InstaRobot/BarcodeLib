@@ -9,6 +9,36 @@ import Foundation
 import UIKit
 
 public struct BarcodeLib {
+    // MARK: - OLD
+    
+    /// Результат валидации
+    public enum Result {
+        case error(error: BarcodeLib.Error)
+        case success(data: String)
+    }
+    
+    /// Варианты ошибок
+    public enum Error {
+        case invalidTicketCode
+        case invalidQRCode
+    }
+    
+    /// Функция, проверяющая корректность всех данных
+    /// - Parameters:
+    ///   - qrValue: Значение считанного QR кода
+    ///   - ticketBarcodeValue: Значение билета, полученное от сервера
+    public static func validate(qrValue: String, ticketBarcodeValue: String) -> BarcodeLib.Result {
+        guard validateQR(qrValue) else {
+            return .error(error: .invalidQRCode)
+        }
+        let qrBytes: [UInt8] = [UInt8](qrValue.utf8)
+        let qrBytesString = qrBytes.map({ String($0) }).joined(separator: " ") + " "
+        let ticketBarcodeActivatedValue = qrBytesString + ticketBarcodeValue
+        return .success(data: ticketBarcodeActivatedValue)
+    }
+    
+    // MARK: - NEW
+    
     /// QRCode validation from device
     /// - Parameter qrString: string for validation
     /// - Returns: result of validation

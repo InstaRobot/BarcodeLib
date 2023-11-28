@@ -1,5 +1,3 @@
-# Countries
-
 ## Installation
 
 ### Swift Package Manager

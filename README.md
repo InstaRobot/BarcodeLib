@@ -7,7 +7,7 @@
 
 _OR_
 
-Update `dependencies` in `Package.swift`
+Обновить `зависимости` в `Package.swift`
 ```swift
 dependencies: [
     .package(url: "https://github.com/InstaRobot/BarcodeLib.git", .upToNextMajor(from: "1.0.0"))
@@ -18,29 +18,30 @@ dependencies: [
 
 ```swift
 
+// заменить старый импорт на новое название модуля
 import BarcodeLib
 
-// Examples
-let oldQR = "9y0VBn9tXu0WgNX/7uNNs0oSEKtGreAo0oDvo4B6rUz0Idk="
-let newQR = "CigIkQMQARoXCLCp+KkGEJFGGIGJeiIIcZkionHjEe4iCDvHIJDZ9SefCl0IkAMQARoQCKjA6KkGEgQRIwAAGIGJeiJEUj4DwLdjHYEjPNGwzDt1p5UwMwuAsMHDumyGbxrAHYLg/ENvGCKxedAbY50htGTGTzcDz3c9/fXLzSxm+wA8iJThug4="
+// MARK: - Обратная совместимость
 
-// Validation for QR-reader
-let validateOld = BarcodeLib.validateQR(oldQR)
-let validateNew = BarcodeLib.validateQR("newQR")
+Здесь ничего не поменялось, только обращение идет уже к 'BarcodeLib'
+
+
+// MARK: - Новые методы (опционально)
+
+let QR = "9y0VBn9tXu0WgNX/7uNNs0oSEKtGreAo0oDvo4B6rUz0Idk="
+
+// Валидация QR-кода (опциоанально)
+let validate = BarcodeLib.validateQR(QR)
         
-print("old: \(validateOld)")
-print("new: \(validateNew)")
+print("qr: \(QR)")
 
-// Generate first part for barcode
-let generatedOld = BarcodeLib.generateBarcode(qrString: oldQR)
-let generatedNew = BarcodeLib.generateBarcode(qrString: newQR)
+// Генерация первой части билета (опционально)
+let generated = BarcodeLib.generateBarcode(qrString: QR)
 
-// all parts for barcode
-let fullBarcode1 = generatedOld + ...
-let fullBarcode2 = generatedNew + ...
+// Полная сборка тела билета (опционально)
+let fullBarcode = generated + ...
 
-// Images from barcode strings
-@State var barcodeImageOld: UIImage? = BarcodeLib.generatePDF417Barcode(from: fullBarcode1)
-@State var barcodeImageNew: UIImage? = BarcodeLib.generatePDF417Barcode(from: fullBarcode2)
+// Баркод для билета (можно использовать старый результат из 'public static func validate(qrValue: String, ticketBarcodeValue: String) -> TicketValidatorCore.Result')
+@State var barcodeImage: UIImage? = BarcodeLib.generatePDF417Barcode(from: fullBarcode)
 
 ```
